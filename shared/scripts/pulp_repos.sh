@@ -24,7 +24,7 @@ done
 
 # Register schedule to sync the 'updates' repo every night
 
-pulp-admin rpm repo sync schedules create --schedule "04:00/P1D" --repo-id "$id"
+pulp-admin rpm repo sync schedules create --schedule "2019-01-01T04:00:00Z/P1D" --repo-id "$id"
 }
 
 #-----
@@ -32,22 +32,22 @@ pulp-admin rpm repo sync schedules create --schedule "04:00/P1D" --repo-id "$id"
 function create_debian_repos()
 {
 version="$1"
-components="$2"
+component="$2"
 architectures="$3"
+releases="$4"
 
-id="debian-${pub_version}"
+id="debian-${version}-${component}"
 src="http://ftp.fr.debian.org/debian"
-releases="Debian$version"
-url="debian/${pub_version}"
-
+url="debian/${version}/${component}"
+set -x
 pulp-admin deb repo create --repo-id "$id" --feed "$src" --releases "$releases" \
-  --architectures "$architectures" --components "$components" --relative-url "$url"
-
-pulp-admin rpm repo sync run --repo-id "$id"
+  --architectures "$architectures" --components "$component" --relative-url "$url"
+set +x
+pulp-admin deb repo sync run --repo-id "$id"
 
 # Refresh every night
 
-pulp-admin rpm repo sync schedules create --schedule "04:00/P1D" --repo-id "$id"
+pulp-admin deb repo sync schedules create --schedule "2019-01-01T04:00:00Z/P1D" --repo-id "$id"
 }
 
 #-----

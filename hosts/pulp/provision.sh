@@ -69,9 +69,10 @@ yuminst pulp-admin-client \
 #
 # Dans /etc/pulp/admin/admin.conf : verify_ssl = False
 #
+# pulp-admin login -u admin -p admin
+#
 # . /shared/scripts/mk_pulp_repos.sh
-# create_centos_repos 7.7.1810 7.6
-# create_debian_repos 9.7 "main contrib" "amd64"
-
+# create_centos_repos 7.6.1810 7.6
+# create_debian_repos 9.7 "main" "amd64" "stretch"
 
 
