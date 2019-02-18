@@ -1,9 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-host="pulp"
-address="103"
-memory = 1024
+host="indy"
+address="104"
+memory = 512
 cpus = 1
 
 #---------

@@ -37,7 +37,7 @@ architectures="$3"
 releases="$4"
 
 id="debian-${version}-${component}"
-src="http://ftp.fr.debian.org/debian"
+src="http://ftp.debian.org/debian"
 url="debian/${version}/${component}"
 set -x
 pulp-admin deb repo create --repo-id "$id" --feed "$src" --releases "$releases" \

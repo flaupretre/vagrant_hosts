@@ -1,26 +1,19 @@
 #!/bin/bash
 
-function yumy()
-{
-yum -y $*
-}
+#-------------
+#echo "---- Running shared provision"
 
-#---
-
-function yuminst()
-{
-yumy install $*
-}
+. /shared/scripts/provision.sh
 
 #-------------
-#echo "---- Ajout des repos"
+#echo "---- Adding repos"
 
 yuminst "https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm" \
   "http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" \
   "https://yum.theforeman.org/releases/1.20/el7/x86_64/foreman-release.rpm"
 
 #-------------
-#echo "---- Ajout de foreman-installer"
+#echo "---- Adding foreman installer"
 
 yuminst foreman-installer
 
@@ -48,7 +41,7 @@ foreman-installer \
 #==========================================================================
 #======= Manuel
 
-# Creation compte flaupretre/toto
+# Creation compte flaupretre/tototiti dans foreman
 
 
 

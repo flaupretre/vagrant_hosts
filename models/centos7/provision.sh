@@ -13,17 +13,31 @@ echo "---- Base"
 yum -y upgrade
 
 yum -y install  net-tools \
-                deltarpm
+                bind-utils \
+                deltarpm \
+                tcpdump
 
 #-------------
-# Install pre-requisites for guest additions
+echo "---- Installing pre-requisites for guest additions"
 
 yum -y install tar bzip2 gcc make perl kernel-devel
 
 #-----
+echo "---- Cleaning yum cache"
 
 rm -rf /var/cache/yum/*
 
-# Disable selinux
+#-----
+echo "---- Disabling selinux"
 
 echo "SELINUX=disabled" >/etc/selinux/config
+
+#-----
+echo "---- Shutting down"
+
+shutdown -h now
+
+#============================================================================
+# MANUEL
+# Install guest additions
+# yum -y remove gcc make kernel-devel

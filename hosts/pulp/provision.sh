@@ -1,16 +1,9 @@
 #!/bin/bash
 
-function yumy()
-{
-yum -y $*
-}
+#-------------
+#echo "---- Running shared provision"
 
-#---
-
-function yuminst()
-{
-yumy install $*
-}
+. /shared/scripts/provision.sh
 
 #-------------
 #echo "---- Configuring repositories"
@@ -33,7 +26,9 @@ yuminst pulp-server \
         python2-qpid \
         qpid-tools \
         pulp-rpm-plugins \
-        pulp-deb-plugins
+        pulp-deb-plugins \
+		pulp-docker-plugins \
+		pulp-ostree-plugins
 
 #-------------
 #echo "---- Configuring"
@@ -43,11 +38,7 @@ pulp-gen-ca-certificate
 
 sudo -u apache pulp-manage-db
 
-cat >/etc/default/pulp_workers <<EOF
-
-PULP_CONCURRENCY=2
-PULP_MAX_TASKS_PER_CHILD=5
-EOF
+sf_check_copy /vagrant/etc/pulp_workers.txt /etc/default/pulp_workers
 
 #-------------
 echo "---- Starting services"
@@ -60,18 +51,17 @@ echo "---- Installing admin client"
 yuminst pulp-admin-client \
         pulp-rpm-admin-extensions \
         pulp-deb-admin-extensions \
-        pulp-puppet-admin-extensions \
-        pulp-docker-admin-extensions
+        pulp-docker-admin-extensions \
+        pulp-ostree-admin-extensions
 
- 
+sed -i '25,$s/^.*verify_ssl:.*$/verify_ssl: False/' /etc/pulp/admin/admin.conf
+
+pulp-admin login -u admin -p admin
+
 #============================================================================
 # MANUEL:
 #
-# Dans /etc/pulp/admin/admin.conf : verify_ssl = False
-#
-# pulp-admin login -u admin -p admin
-#
-# . /shared/scripts/mk_pulp_repos.sh
+# . /vagrant/pulp_repos.sh
 # create_centos_repos 7.6.1810 7.6
 # create_debian_repos 9.7 "main" "amd64" "stretch"
 
