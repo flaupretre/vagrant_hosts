@@ -9,3 +9,4 @@
 192.168.56.105	gocd gocd.canaltp.local
 192.168.56.106	nfs nfs.canaltp.local
 192.168.56.107	miq miq.canaltp.local
+192.168.56.108	test1 test1.canaltp.local
