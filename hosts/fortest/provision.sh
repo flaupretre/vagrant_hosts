@@ -1,5 +1,7 @@
 #!/bin/bash
 
+tmpf=/tmp/.tf$$
+
 #-------------
 #echo "---- Running shared provision"
 
@@ -20,8 +22,16 @@ yuminst foreman-installer
 #-------------
 #echo "---- Running foreman installer"
 
-foreman-installer \
-  --enable-foreman-plugin-ansible                    \
+# Foreman installer checks hostname and requires this
+
+echo '192.168.56.102  fortest.canaltp.local fortest' >$tmpf
+cat /etc/hosts >>$tmpf
+cp $tmpf /etc/hosts
+
+# Run installer
+
+foreman-installer                                          \
+  --enable-foreman-plugin-ansible                          \
   --enable-foreman-plugin-docker                           \
   --enable-foreman-plugin-discovery                        \
   --enable-foreman-plugin-monitoring                       \
@@ -35,8 +45,10 @@ foreman-installer \
   --enable-foreman-proxy-plugin-openscap                   \
   --enable-foreman-proxy-plugin-pulp                       \
   --enable-foreman-proxy-plugin-remote-execution-ssh       \
-  --foreman-proxy-bmc true
+  --foreman-proxy-bmc true                                 \
 
+#  --foreman-locations-enabled                              \
+#  --foreman-organizations-enabled
 
 #==========================================================================
 #======= Manuel
