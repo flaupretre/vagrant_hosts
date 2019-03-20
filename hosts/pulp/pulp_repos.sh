@@ -6,25 +6,42 @@
 #
 #=============================================================================
 
+function proxy_string()
+{
+local str
+
+str=''
+
+[ -n "$PROXY_URL" ] && str="--proxy-host=$PROXY_URL"
+[ -n "$PROXY_PORT" ] && str="$str --proxy-port=$PROXY_PORT"
+
+echo $str
+}
+
+#-----
+
 function create_centos_repos()
 {
 orig_version="$1"
 pub_version="$2"
 
 arch=x86_64
+repos="os centosplus extras updates"
 
-
-for repo in os centosplus extras updates ; do
+for repo in $repos ; do
   id="centos-${pub_version}-${repo}"
   src="http://mirror.centos.org/centos/${orig_version}/${repo}/${arch}/"
   url="centos/${pub_version}/${repo}"
-  pulp-admin rpm repo create --repo-id "$id" --feed "$src" --relative-url "$url"
+  proxy=`proxy_string`
+  pulp-admin rpm repo create --repo-id "$id" --feed "$src" $proxy \
+    --relative-url "$url"
   pulp-admin rpm repo sync run --repo-id "$id"
 done
 
 # Register schedule to sync the 'updates' repo every night
 
-pulp-admin rpm repo sync schedules create --schedule "2019-01-01T04:00:00Z/P1D" --repo-id "$id"
+pulp-admin rpm repo sync schedules create --schedule "2019-01-01T04:00:00Z/P1D" \
+  --repo-id "$id"
 }
 
 #-----
@@ -39,15 +56,16 @@ releases="$4"
 id="debian-${version}-${component}"
 src="http://ftp.debian.org/debian"
 url="debian/${version}/${component}"
-set -x
-pulp-admin deb repo create --repo-id "$id" --feed "$src" --releases "$releases" \
-  --architectures "$architectures" --components "$component" --relative-url "$url"
-set +x
+proxy=`proxy_string`
+pulp-admin deb repo create --repo-id "$id" --feed "$src" $proxy \
+  --releases "$releases" --architectures "$architectures" \
+  --components "$component" --relative-url "$url"
 pulp-admin deb repo sync run --repo-id "$id"
 
 # Refresh every night
 
-pulp-admin deb repo sync schedules create --schedule "2019-01-01T04:00:00Z/P1D" --repo-id "$id"
+pulp-admin deb repo sync schedules create --schedule "2019-01-01T04:00:00Z/P1D" \
+  --repo-id "$id"
 }
 
 #-----

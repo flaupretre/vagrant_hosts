@@ -62,7 +62,14 @@ pulp-admin login -u admin -p admin
 # MANUEL:
 #
 # . /vagrant/pulp_repos.sh
+# [ export PROXY_URL=http://ctp-prd-proxy ]
+# [ export PROXY_PORT=1512 ]
 # create_centos_repos 7.6.1810 7.6
 # create_debian_repos 9.7 "main" "amd64" "stretch"
+#
+# Prevoir des FS séparés pour :
+#   - /var/lib/pulp continet tous les fichiers
+#   - /var/lib/mongodb 10 Go
+#   - Déplacer /var/cache/pulp vers /var/lib/pulp/cache et créer lien symbolique
 
 
