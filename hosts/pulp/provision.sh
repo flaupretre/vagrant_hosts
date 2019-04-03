@@ -66,9 +66,11 @@ pulp-admin login -u admin -p admin
 # [ export PROXY_PORT=1512 ]
 # create_centos_repos 7.6.1810 7.6
 # create_debian_repos 9.7 "main" "amd64" "stretch"
+# pulp-admin rpm repo create --repo-id external-misc-el7 --relative-url external/misc/el7
+# sysfunc pulp_rpm_upload external-misc-el7 /tmp/sysfunc-*.el7.noarch.rpm
 #
-# Prevoir des FS séparés pour :
-#   - /var/lib/pulp continet tous les fichiers
+# Prévoir des FS séparés pour :
+#   - /var/lib/pulp contient tous les fichiers
 #   - /var/lib/mongodb 10 Go
 #   - Déplacer /var/cache/pulp vers /var/lib/pulp/cache et créer lien symbolique
 
